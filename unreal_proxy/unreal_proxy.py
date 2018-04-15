@@ -12,7 +12,7 @@ drone_texture_names=['/Game/TextureRenderTarget2D_0']
 drone_textures_depth_names=[]
 #needed actors
 #drone_actors_names=['g500_robot']
-drone_actors_names=['FbxScene_openrov_0']
+drone_actors_names=['cares_rov3_0']
 
 
 context = zmq.Context()
@@ -40,8 +40,8 @@ socket_pub.bind("tcp://%s:%d" % config.zmq_pub_unreal_proxy )
 start=time.time()
 
 def main_loop(gworld):
-    print('-- actors --',gworld)
-    for p in ph.GetActorsNames(gworld,1024*200):
+    print('-- actors list --',gworld)
+    for p in ph.GetActorsNames(gworld,1024*1000):
         print(p)
     print('-- textures --')
     drone_textures=[]
@@ -106,7 +106,7 @@ def main_loop(gworld):
             if pub_cv:
                 for topic,img in zip(topics,imgs):
                     #socket_pub.send_multipart([topic,pickle.dumps(img,2)])
-                    print('--->',img[:].max(),img[:].min())
+                    #print('--->',img[:].max(),img[:].min())
                     socket_pub.send_multipart([topic,struct.pack('lll',*img.shape),img.tostring()])
                     #socket_pub.send_multipart([topic,pickle.dumps(img,-1)])
 
