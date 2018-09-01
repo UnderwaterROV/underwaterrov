@@ -44,6 +44,8 @@ numerical_constants = np.array([
                             0.5,  # Izz [kg*m^2]
                                ]
                             ) 
+thruster_filt_coef=0.2
+
 
 def test_dynamics():
     x0 = np.zeros(12)
@@ -81,13 +83,15 @@ if 1 and  __name__=='__main__':
     r = rospy.Rate(fps)
     xx = np.zeros(12)
     thrusters=[0,0,0,0]
+    thrusters_filt=np.array(thrusters)
     rospy.Subscriber('/thrusters',Float64MultiArray, updateThrusters)
     pub_pose= rospy.Publisher('parag_rov', Pose)
     cnt=0
     while not rospy.is_shutdown():
         #now=rospy.Time.now()
+        thrusters_filt = thrusters_filt*(1-thruster_filt_coef) + thruster_filt_coef*np.array(thrusters)
         sim_time=cnt*1.0/fps
-        x_dot=right_hand_side(xx, sim_time, thrusters, numerical_constants)
+        x_dot=right_hand_side(xx, sim_time, thrusters_filt, numerical_constants)
         xx=xx+x_dot*1.0/fps
         pub_position_struct(xx,pub_pose,cnt)
         r.sleep()

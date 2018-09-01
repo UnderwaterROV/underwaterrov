@@ -31,11 +31,13 @@ def callback(data):
 	data.orientation.y,
 	data.orientation.z,
 	data.orientation.w)
-    ps['posz']=-ps['posz']
+    #ps['posz']=-ps['posz']
     euler = tf.transformations.euler_from_quaternion(quaternion,'szxy')
-    roll = euler[0]/np.pi*180
-    pitch = euler[1]/np.pi*180
-    yaw = euler[2]/np.pi*180
+    #roll = euler[0]/np.pi*180-90
+    #pitch = euler[1]/np.pi*180
+    pitch = euler[0]/np.pi*180
+    roll = euler[1]/np.pi*180-90
+    yaw = euler[2]/np.pi*180-90
 
     ps['roll'],ps['pitch'],ps['yaw']=roll,pitch,yaw
     
